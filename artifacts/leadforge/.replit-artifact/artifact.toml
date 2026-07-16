@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "LeadForge"
+version = "1.0.0"
+id = "artifacts/leadforge"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18555
+
+[services.development]
+run = "pnpm --filter @workspace/leadforge run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/leadforge", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/leadforge/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18555"
+BASE_PATH = "/"

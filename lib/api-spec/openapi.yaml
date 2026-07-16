@@ -3,13 +3,15 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: LeadForge API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: leads
+    description: Lead management operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,145 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /leads:
+    get:
+      operationId: listLeads
+      tags: [leads]
+      summary: List all leads
+      description: Returns all captured leads ordered by creation date (newest first)
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: trade_type
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of leads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lead"
+    post:
+      operationId: createLead
+      tags: [leads]
+      summary: Submit a lead
+      description: Called when a business owner submits the free-audit form
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /leads/stats:
+    get:
+      operationId: getLeadStats
+      tags: [leads]
+      summary: Get lead pipeline stats
+      description: Returns aggregate counts and breakdowns for the admin dashboard
+      responses:
+        "200":
+          description: Lead statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadStats"
+
+  /leads/{id}:
+    get:
+      operationId: getLead
+      tags: [leads]
+      summary: Get a single lead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lead found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "404":
+          description: Lead not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateLead
+      tags: [leads]
+      summary: Update a lead (e.g. status)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadUpdate"
+      responses:
+        "200":
+          description: Lead updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "404":
+          description: Lead not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteLead
+      tags: [leads]
+      summary: Delete a lead
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Lead deleted
+        "404":
+          description: Lead not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +175,109 @@ components:
       required:
         - status
 
+    Lead:
+      type: object
+      required:
+        - id
+        - business_name
+        - contact_email
+        - status
+        - created_at
+      properties:
+        id:
+          type: integer
+        business_name:
+          type: string
+        business_website:
+          type: ["string", "null"]
+        contact_email:
+          type: string
+        contact_phone:
+          type: ["string", "null"]
+        trade_type:
+          type: ["string", "null"]
+        city:
+          type: ["string", "null"]
+        google_rating:
+          type: ["string", "null"]
+        google_review_count:
+          type: ["string", "null"]
+        pagespeed_score:
+          type: ["string", "null"]
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    LeadInput:
+      type: object
+      required:
+        - business_name
+        - contact_email
+      properties:
+        business_name:
+          type: string
+          minLength: 1
+        business_website:
+          type: ["string", "null"]
+        contact_email:
+          type: string
+        contact_phone:
+          type: ["string", "null"]
+        trade_type:
+          type: ["string", "null"]
+        city:
+          type: ["string", "null"]
+
+    LeadUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+        google_rating:
+          type: ["string", "null"]
+        google_review_count:
+          type: ["string", "null"]
+        pagespeed_score:
+          type: ["string", "null"]
+
+    LeadStats:
+      type: object
+      required:
+        - total
+        - by_status
+        - by_trade
+        - recent_count
+      properties:
+        total:
+          type: integer
+        by_status:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatGroup"
+        by_trade:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatGroup"
+        recent_count:
+          type: integer
+
+    StatGroup:
+      type: object
+      required:
+        - label
+        - count
+      properties:
+        label:
+          type: string
+        count:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string

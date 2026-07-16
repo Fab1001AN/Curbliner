@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadForge — Free Business Audit</title>
+  <style>
+    body {
+      font-family: -apple-system, Arial, sans-serif;
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 0 20px;
+      color: #1a1a1a;
+    }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    p.sub { color: #555; margin-bottom: 32px; }
+    label { display: block; margin-top: 16px; font-weight: 600; font-size: 14px; }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 24px;
+      padding: 12px 24px;
+      background: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover { background: #333; }
+    #result { margin-top: 24px; padding: 16px; border-radius: 6px; display: none; }
+    #result.success { background: #e8f5e9; color: #1b5e20; display: block; }
+    #result.error { background: #ffebee; color: #b71c1c; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Get Your Free Business Visibility Audit</h1>
+  <p class="sub">We'll analyze your online presence — website speed, Google reviews, and more — and send you a free personalized report.</p>
+
+  <form id="leadForm">
+    <label>Business Name *</label>
+    <input type="text" id="business_name" required>
+
+    <label>Website (if you have one)</label>
+    <input type="text" id="business_website" placeholder="www.yourbusiness.com">
+
+    <label>Email *</label>
+    <input type="email" id="contact_email" required>
+
+    <label>Phone</label>
+    <input type="tel" id="contact_phone">
+
+    <label>Trade</label>
+    <select id="trade_type">
+      <option value="roofing">Roofing</option>
+      <option value="hvac">HVAC</option>
+      <option value="plumbing">Plumbing</option>
+      <option value="electrical">Electrical</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label>City</label>
+    <input type="text" id="city">
+
+    <button type="submit">Get My Free Audit</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('leadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        business_name: document.getElementById('business_name').value,
+        business_website: document.getElementById('business_website').value || null,
+        contact_email: document.getElementById('contact_email').value,
+        contact_phone: document.getElementById('contact_phone').value || null,
+        trade_type: document.getElementById('trade_type').value,
+        city: document.getElementById('city').value || null,
+      };
+
+      const resultDiv = document.getElementById('result');
+      try {
+        const res = await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Submission failed');
+        resultDiv.className = 'success';
+        resultDiv.textContent = "Thanks! We're generating your audit — check your email soon.";
+        document.getElementById('leadForm').reset();
+      } catch (err) {
+        resultDiv.className = 'error';
+        resultDiv.textContent = "Something went wrong. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>

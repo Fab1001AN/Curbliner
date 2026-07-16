@@ -1,6 +1,6 @@
-# [Project name]
+# LeadForge
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A lead-generation tool for home-service contractors that offers a free online visibility audit to capture leads, and gives the team an admin dashboard to manage those leads through a pipeline.
 
 ## Run & Operate
 
