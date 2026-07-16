@@ -20,7 +20,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children }) => {
       <aside className="w-64 border-r bg-card flex flex-col hidden md:flex">
         <div className="h-16 flex items-center px-6 border-b">
           <Hammer className="w-6 h-6 text-primary mr-2" />
-          <span className="font-display font-bold text-xl tracking-tight">LeadForge</span>
+          <span className="font-display font-bold text-xl tracking-tight">Curbliner</span>
         </div>
         
         <nav className="flex-1 py-6 px-4 space-y-1">
@@ -55,7 +55,7 @@ export const AdminLayout: FC<AdminLayoutProps> = ({ children }) => {
         <header className="h-16 border-b bg-card flex items-center justify-between px-6 md:px-8">
           <div className="flex items-center md:hidden">
             <Hammer className="w-6 h-6 text-primary mr-2" />
-            <span className="font-display font-bold text-lg tracking-tight">LeadForge</span>
+            <span className="font-display font-bold text-lg tracking-tight">Curbliner</span>
           </div>
           <div className="ml-auto flex items-center space-x-4">
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">

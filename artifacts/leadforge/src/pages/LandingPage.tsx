@@ -73,7 +73,7 @@ export default function LandingPage() {
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
               <Hammer className="w-5 h-5" />
             </div>
-            <span className="font-display font-extrabold text-xl tracking-tight">LeadForge</span>
+            <span className="font-display font-extrabold text-xl tracking-tight">Curbliner</span>
           </div>
           <nav className="hidden md:flex gap-6 items-center font-medium text-sm text-muted-foreground">
             <a href="#how-it-works" className="hover:text-foreground transition-colors">How it Works</a>
@@ -313,7 +313,7 @@ export default function LandingPage() {
                         {createLead.isPending ? "Analyzing..." : "Get Free Audit"}
                       </Button>
                       <p className="text-xs text-center text-muted-foreground font-medium">
-                        By submitting this form, you agree to receive emails from LeadForge.
+                        By submitting this form, you agree to receive emails from Curbliner.
                       </p>
                     </form>
                   </Form>
@@ -328,10 +328,10 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
             <Hammer className="w-5 h-5 text-primary" />
-            <span className="font-display font-bold text-xl tracking-tight">LeadForge</span>
+            <span className="font-display font-bold text-xl tracking-tight">Curbliner</span>
           </div>
           <p className="text-sm font-medium text-muted-foreground">
-            © {new Date().getFullYear()} LeadForge. Designed for contractors.
+            © {new Date().getFullYear()} Curbliner. Designed for contractors.
           </p>
         </div>
       </footer>
